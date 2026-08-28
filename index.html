@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sukaina Zaidi — Ask Me Anything</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#304C64;
+    --teal:#26788E;
+    --pale:#A4CCD4;
+    --rust:#d05254;
+    --dark-rust:#631B08;
+    --ink:#181c1f;
+    --white:#ffffff;
+    --gray-1:#e9edef;
+    --gray-2:#8a969c;
+    --gray-3:#4a565c;
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--navy);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  .app{
+    width:100%;
+    height:100vh;
+    height:100dvh;
+    display:flex;
+    flex-direction:column;
+    background:var(--navy);
+    overflow:hidden;
+  }
+
+  .main{
+    flex:1;
+    min-height:0;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    max-width:920px;
+    margin:0 auto;
+  }
+
+  /* ---------- MASTHEAD ---------- */
+  .masthead{
+    padding:14px 22px 12px;
+    border-bottom:1px solid rgba(164,204,212,0.18);
+    position:relative;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+
+  @media (min-width:900px){
+    .app{flex-direction:row;}
+    .masthead{
+      width:300px;
+      flex-shrink:0;
+      height:100%;
+      padding:36px 30px;
+      border-bottom:none;
+      border-right:1px solid rgba(164,204,212,0.18);
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+    }
+    .masthead::before{top:-40px; right:-80px;}
+    .name{font-size:30px; margin-top:6px;}
+    .role-line{display:block !important; font-size:14.5px;}
+    .main{max-width:none; height:100%;}
+  }
+  .masthead::before{
+    content:"";
+    position:absolute;
+    top:-60px; right:-60px;
+    width:220px; height:220px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(38,120,142,0.55), transparent 70%);
+    pointer-events:none;
+  }
+  .file-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--pale);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .file-tag .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--rust);
+    box-shadow:0 0 0 3px rgba(208,82,84,0.25);
+    animation:pulse 2.2s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.35;}
+  }
+  .name{
+    font-family:'Newsreader', serif;
+    font-weight:500;
+    font-size:clamp(20px,4.5vw,26px);
+    color:var(--white);
+    margin:0 0 4px;
+    letter-spacing:-0.01em;
+    line-height:1.15;
+  }
+  .name em{
+    font-style:italic;
+    color:var(--pale);
+  }
+  .role-line{
+    display:none;
+    font-size:13.5px;
+    color:var(--gray-1);
+    max-width:420px;
+    line-height:1.45;
+    margin:0 0 12px;
+  }
+  .status-line{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--pale);
+    display:inline-flex;
+    align-items:center;
+    border:1px solid rgba(164,204,212,0.35);
+    border-radius:999px;
+    padding:5px 12px;
+    background:rgba(48,76,100,0.4);
+  }
+  .status-line .cursor{
+    display:inline-block;
+    width:7px;height:13px;
+    background:var(--rust);
+    margin-left:8px;
+    animation:blink 1s step-end infinite;
+  }
+  @keyframes blink{
+    0%,49%{opacity:1;}
+    50%,100%{opacity:0;}
+  }
+
+  /* ---------- CHAT WINDOW ---------- */
+  .chat-window{
+    flex:1;
+    background:linear-gradient(180deg, var(--navy) 0%, #24384a 100%);
+    padding:26px 22px 10px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    overflow-y:auto;
+    scroll-behavior:smooth;
+  }
+
+  .msg{
+    max-width:82%;
+    padding:13px 16px;
+    border-radius:var(--radius);
+    font-size:15px;
+    line-height:1.55;
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeIn 0.38s ease forwards;
+  }
+  @keyframes fadeIn{
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .msg.assistant{
+    align-self:flex-start;
+    background:var(--teal);
+    color:var(--white);
+    border-bottom-left-radius:4px;
+  }
+  .msg.assistant .eyebrow{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.6);
+    margin-bottom:6px;
+  }
+  .msg.user{
+    align-self:flex-end;
+    background:var(--pale);
+    color:var(--navy);
+    font-weight:500;
+    border-bottom-right-radius:4px;
+  }
+  .msg a{color:inherit; text-decoration:underline; text-decoration-color:rgba(255,255,255,0.5);}
+  .msg.user a{text-decoration-color:rgba(48,76,100,0.4);}
+
+  .msg-detail-btn{
+    display:inline-block;
+    margin-top:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.03em;
+    color:var(--white);
+    background:rgba(255,255,255,0.14);
+    border:1px solid rgba(255,255,255,0.35);
+    padding:6px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background 0.15s ease, transform 0.15s ease;
+  }
+  .msg-detail-btn:hover{background:rgba(255,255,255,0.26); transform:translateY(-1px);}
+
+  .typing{
+    align-self:flex-start;
+    background:var(--teal);
+    padding:14px 18px;
+    border-radius:var(--radius);
+    border-bottom-left-radius:4px;
+    display:flex;
+    gap:5px;
+    opacity:0;
+    animation:fadeIn 0.3s ease forwards;
+  }
+  .typing span{
+    width:7px;height:7px;border-radius:50%;
+    background:rgba(255,255,255,0.85);
+    animation:bounce 1.2s infinite ease-in-out;
+  }
+  .typing span:nth-child(2){animation-delay:0.15s;}
+  .typing span:nth-child(3){animation-delay:0.3s;}
+  @keyframes bounce{
+    0%,60%,100%{transform:translateY(0); opacity:0.5;}
+    30%{transform:translateY(-5px); opacity:1;}
+  }
+
+  /* ---------- CONTACT NUDGE ---------- */
+  .nudge{
+    align-self:flex-start;
+    max-width:88%;
+    background:rgba(99,27,8,0.28);
+    border:1px solid rgba(208,82,84,0.5);
+    padding:14px 16px;
+    border-radius:var(--radius);
+    border-bottom-left-radius:4px;
+    color:var(--white);
+    font-size:14px;
+    line-height:1.5;
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeIn 0.4s ease forwards;
+  }
+  .nudge strong{color:var(--pale);}
+  .nudge-links{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .nudge-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--white);
+    background:var(--rust);
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    transition:background 0.15s ease;
+  }
+  .nudge-links a:hover{background:var(--dark-rust);}
+  .nudge-links a.secondary{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.4);
+  }
+  .nudge-links a.secondary:hover{background:rgba(255,255,255,0.12);}
+
+  /* ---------- CHIPS ---------- */
+  .chips-row{
+    padding:10px 22px;
+    display:flex;
+    gap:8px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    background:var(--navy);
+    border-top:1px solid rgba(164,204,212,0.14);
+    scrollbar-width:none;
+  }
+  .chips-row::-webkit-scrollbar{display:none;}
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--pale);
+    background:rgba(164,204,212,0.08);
+    border:1px solid rgba(164,204,212,0.4);
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    white-space:nowrap;
+    flex-shrink:0;
+    transition:all 0.15s ease;
+  }
+  .chip:hover{
+    background:var(--rust);
+    border-color:var(--rust);
+    color:var(--white);
+    transform:translateY(-1px);
+  }
+
+  /* ---------- INPUT BAR ---------- */
+  .input-bar{
+    display:flex;
+    gap:10px;
+    padding:10px 22px calc(16px + env(safe-area-inset-bottom));
+    background:var(--navy);
+    flex-shrink:0;
+  }
+  .input-bar input{
+    flex:1;
+    min-width:0;
+    border:1px solid rgba(164,204,212,0.4);
+    background:rgba(255,255,255,0.06);
+    color:var(--white);
+    border-radius:999px;
+    padding:13px 18px;
+    font-size:14.5px;
+    font-family:'Inter',sans-serif;
+    outline:none;
+    transition:border 0.15s ease;
+  }
+  .input-bar input::placeholder{color:rgba(233,237,239,0.45);}
+  .input-bar input:focus{border-color:var(--pale);}
+  .input-bar input:focus-visible{outline:2px solid var(--pale); outline-offset:2px;}
+
+  .send-btn{
+    background:var(--rust);
+    color:var(--white);
+    border:none;
+    border-radius:999px;
+    width:46px;height:46px;
+    min-width:46px;
+    flex-shrink:0;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.15s ease, transform 0.1s ease;
+  }
+  .send-btn:hover{background:var(--dark-rust);}
+  .send-btn:active{transform:scale(0.94);}
+  .send-btn:focus-visible{outline:2px solid var(--pale); outline-offset:2px;}
+  .send-btn svg{width:18px;height:18px;}
+
+  /* scrollbar */
+  .chat-window::-webkit-scrollbar{width:6px;}
+  .chat-window::-webkit-scrollbar-thumb{background:rgba(164,204,212,0.3); border-radius:10px;}
+
+  @media (max-width:480px){
+    .masthead{padding:10px 14px 10px;}
+    .chat-window{padding:16px 14px 8px;}
+    .chips-row{padding:8px 14px;}
+    .input-bar{padding:8px 14px calc(14px + env(safe-area-inset-bottom));}
+    .msg{max-width:90%; font-size:14.5px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="masthead">
+    <div class="file-tag"><span class="dot"></span>SUBJECT FILE — OPEN</div>
+    <h1 class="name">Sukaina Zaidi<br><em>ask, don't scroll</em></h1>
+    <p class="role-line">Research, editorial, and UX work, held together by the same instinct: take something dense and make it usable. This page answers questions the way I would in a coffee chat — ask it something.</p>
+    <div class="status-line">STATUS: open to new roles<span class="cursor"></span></div>
+  </div>
+
+  <div class="main">
+    <div class="chat-window" id="chatWindow"></div>
+
+    <div class="chips-row" id="chipsRow"></div>
+
+    <div class="input-bar">
+      <input type="text" id="userInput" placeholder="Ask about my background, a project, what I'm looking for…" autocomplete="off">
+      <button class="send-btn" id="sendBtn" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   KNOWLEDGE BASE
+   ============================================================ */
+const RESUME_URL = "resume.pdf"; // swap with hosted resume link
+const LINKEDIN_URL = "https://www.linkedin.com/in/sukainazaidi/";
+const EMAIL = "sukainazaidi13@gmail.com";
+
+const knowledgeBase = [
+  {
+    id: "intro",
+    keywords: ["who are you","about you","about yourself","background","tell me about yourself","introduce","intro","who is sukaina"],
+    eyebrow: "Background",
+    short: "I'm Sukaina. My work sits at the intersection of IT, professional writing, and research — an unusual mix, and exactly what makes me good at what I do. That's shown up as research assistant work on generative AI, editorial leadership on an academic journal, and a UX research capstone, all built on a double major in Communication, Culture, Information & Technology and Professional Writing & Communication at UTM.",
+    detail: "Each piece reinforces the others more than people expect. The IT and CCIT side means I actually understand how the systems work, not just how they're used. The writing side means I can make dense material readable without dumbing it down. The research side is the discipline that ties both together — knowing what's actually true before you write it down or build on it. I'm about to add a Master's in Digital Experience Innovation at Waterloo (starting September 2026) to formalize the product and design layer on top."
+  },
+  {
+    id: "current-focus",
+    keywords: ["currently focused","working on now","what are you doing now","current work","right now"],
+    eyebrow: "Right now",
+    short: "Right now I'm wrapping up a research assistant role at UTM studying generative AI's effect on newsroom labour, and about to start a Master's in Digital Experience Innovation at Waterloo this September. It's a transition point, not a lull — I'm using it to point the research and editorial instincts at product and design problems directly.",
+    detail: "The research role runs through August 2026, so I'm in the process of closing that out properly rather than letting it trail off — final source verification for a forthcoming academic publication on cultural labour, and handoff notes for whoever picks up the timeline work next. Waterloo starts right after."
+  },
+  {
+    id: "project-timeline",
+    keywords: ["timeline","digital media organizing","media labour project","media labor project","proud of","project you're proud","favourite project","favorite project","unionizing"],
+    eyebrow: "Project",
+    short: "One I'm proud of: the Digital Media Unionizing Timeline, published publicly at culturalworkersorganize.org. I authored and edited entries translating complex labour and media developments into accessible, research-backed content — real academic and industry material, made readable for people outside the field.",
+    detail: "The raw material was scattered across academic papers, union filings, and trade press, each with different vocabularies for the same phenomenon. My job was synthesis and editorial judgment: what belongs on the timeline, what's noise, how you phrase a labour dispute so someone unfamiliar with it gets it in one read. I also did the source verification and fact-checking behind it, and that same rigour is feeding into a forthcoming academic publication on cultural labour I'm helping fact-check now."
+  },
+  {
+    id: "project-ai-tools",
+    keywords: ["ai tools","generative ai","chatgpt claude gemini","comparative","how do you work with ai","notebooklm","use ai","newsroom"],
+    eyebrow: "Project",
+    short: "At UTM I evaluated how emerging generative AI tools are actually integrated into newsroom workflows — not benchmark testing, but looking at the gap between what these systems can technically do and how newsrooms actually adopt them. That gap, more than the tech itself, is what I find interesting.",
+    detail: "Concretely, I looked at how AI adoption affects trust, communication, and day-to-day operational process inside newsrooms, and synthesized that alongside faculty researchers into structured insights on AI ethics, usability, and labour. I care about how people actually experience AI, not just how impressively it's built — a tool can be technically capable and still fail completely on trust or workflow fit, and that's usually the more important story."
+  },
+  {
+    id: "project-editorial",
+    keywords: ["editor","editorial","journal","co-editor","isup","writing for university and beyond","mentorship","student authors"],
+    eyebrow: "Project",
+    short: "I spent two and a half years as Co-Editor of Writing for University and Beyond, an academic journal through UTM's Institute for the Study of University Pedagogy — leading editorial review, managing publication decisions, and mentoring first-year student authors through multiple rounds of revision.",
+    detail: "This wasn't just proofreading. I applied a user-centered, systems-oriented approach to the editorial process itself — thinking about readability and accessibility as design problems, not just grammar. I also coordinated timelines and operations across faculty mentors and student reviewers in a genuinely deadline-driven environment, which is where I learned that editorial judgment and product judgment are closer than people assume. I have a published research essay through the same journal, on the effectiveness of philosophical reflections, if you want to see the writing itself."
+  },
+  {
+    id: "project-ux",
+    keywords: ["ux","usability testing","capstone","wireframes","design project","user interviews","figma"],
+    eyebrow: "Project",
+    short: "For a Design Thinking capstone I led user interviews and usability testing on a student-facing tool, then delivered wireframes based on what we found. Short version: people said it 'felt overwhelming,' and the fix wasn't visual polish — it was cutting the number of decisions per screen.",
+    detail: "This was the project that made research feel like product work instead of an academic exercise. We ran multiple rounds of testing, and the same vague complaint kept surfacing across different users who couldn't articulate the actual problem. Digging into session recordings instead of just the exit surveys is what surfaced the real issue. Ask me about that moment directly if you want the fuller story."
+  },
+  {
+    id: "product-thinking",
+    keywords: ["messy insight","hard call","tough decision","judgment","product thinking","decision you made","turn insight into decision","example of a decision"],
+    eyebrow: "How I think",
+    short: "During usability testing, three separate users said almost the same vague thing: it felt like 'a lot.' Easy to chase that as a visual redesign. The actual issue, once I got into the session recordings, was seven choices on one screen with no default.",
+    detail: "The decision was to cut it to two choices with smart defaults for the rest, not to reskin anything. Next round of testing, the 'overwhelming' feedback disappeared, and nobody mentioned the visuals at all — because they were never the problem. That's the pattern I trust now: when feedback is vague, the fix is almost never the thing the vague feedback names."
+  },
+  {
+    id: "community",
+    keywords: ["community","networking","thaqalayn","leadership","volunteer","president","student association"],
+    eyebrow: "Community",
+    short: "I care about community and showing up where it matters, over performative networking. I was President of the Thaqalayn Student Association at UTM for a year, running the org's strategy and day-to-day operations, planning events end to end, and building an inclusive, active member base.",
+    detail: "That meant coordinating executive teams, delegating and mentoring rather than doing everything myself, and adapting programming based on actual member feedback instead of what looked good on a poster. Most of the best things that have happened in my career started with genuine connection, not a cold LinkedIn message — this role is where that became a conviction instead of just a preference."
+  },
+  {
+    id: "skills",
+    keywords: ["skills","good at","strengths","experience","what can you do","translate","certifications","harvard","python"],
+    eyebrow: "Skills",
+    short: "Research and editorial work translate more directly into product thinking than people expect. Literature synthesis is requirement-gathering with better citations. Editing under deadline is stakeholder feedback with a spine. On the technical side: Python (Harvard's Introduction to Programming), Figma, and two Microsoft certifications in cybersecurity and AI-powered security.",
+    detail: "Breaking it down: qualitative research and synthesis (structuring ambiguous problems), editorial judgment (deciding what's worth shipping, mentoring contributors through revisions), UX research (interviews, usability testing, wireframing in Figma), and hands-on generative AI evaluation across four major tools inside a real newsroom-adjacent workflow. Certifications: Microsoft Cybersecurity Career Essentials, Microsoft Security Essentials (AI-Powered Protection), and CS50-style Python fundamentals from Harvard. Underneath all of it is the same job — take something unstructured and make it usable."
+  },
+  {
+    id: "roles-drawn-to",
+    keywords: ["looking for next","next role","kind of role","ideal job","what environment","type of company","looking for"],
+    eyebrow: "What I want",
+    short: "Teams where research, writing, and design aren't siloed off from each other — product, UX, editorial, or research roles that need someone comfortable moving between all three. I want a place where that background is useful on day one, not a nice-to-have.",
+    detail: "I'm not locked into one title. What matters more is the environment: somewhere thinking carefully about the people on the other end of the work, whether that's a reader, a user, or a research participant, and somewhere that values genuine relationships over transactional networking. I like small teams for the same reason I like editorial work — you can see the whole shape of the problem, and your judgment actually moves the outcome."
+  },
+  {
+    id: "why-direction",
+    keywords: ["why product management","why pm","why the switch","career change","why product","pivot","why this direction"],
+    eyebrow: "Why this direction",
+    short: "Editorial and research work is already product-adjacent without the title — you're constantly deciding what matters, what to cut, and how to make something dense usable. I want to keep doing that work somewhere it compounds faster and reaches more people.",
+    detail: "Every research project I finished ended the same way — a report goes into an archive, or an edit ships in an issue that comes out twice a year. Good work, but the loop is slow and the audience is small. Product and UX work give you the same judgment calls with a faster feedback cycle and a bigger reach, which is the trade that's pulling me in that direction."
+  },
+  {
+    id: "ai-philosophy",
+    keywords: ["how do you think about ai","ai experience","human side of ai","care about ai","ai ethics","ai adoption"],
+    eyebrow: "On AI",
+    short: "I care about how people actually experience AI, not just how it's built. A capable model that nobody trusts or adopts correctly isn't a success story — most of my research has lived in that gap between technical capability and real-world usability.",
+    detail: "That's shown up concretely in studying how newsroom staff actually integrate AI tools into daily workflows versus how those tools are pitched, and in doing hands-on comparative work across ChatGPT, Claude, Gemini, and NotebookLM to see where each one actually earns trust in a real task. I share honest takes on this on LinkedIn too — less hype, more what's actually happening on the ground."
+  },
+  {
+    id: "distinct",
+    keywords: ["what makes you different","distinct","stand out","unique","why you","why should we hire"],
+    eyebrow: "The pitch",
+    short: "Most people are either the researcher who writes the report or the builder who ships the thing. I've spent years doing both — synthesizing messy academic material and then publishing it, testing a prototype and then redrawing it myself.",
+    detail: "That loop — insight to artifact, without a handoff in between — is the thing that's harder to teach than either skill alone. It also means I don't need research 'translated' for me by someone else on the team. I've done both halves of that conversation myself, repeatedly, under deadline — with an IT and research foundation underneath it that most writers don't have, and a writing and communication instinct that most technical people don't have."
+  },
+  {
+    id: "linkedin",
+    keywords: ["linkedin","follow you","what do you post","your posts","social media"],
+    eyebrow: "LinkedIn",
+    short: "On LinkedIn I share honest takes on AI, product thinking, and what building a career actually looks like from the inside — less highlight reel, more process. Worth a follow if that's useful to you.",
+    detail: null
+  },
+  {
+    id: "contact",
+    keywords: ["resume","cv","contact","email","reach you","hire you"],
+    eyebrow: "Get in touch",
+    short: "Resume is right here, and I'm reachable by email or LinkedIn. Happy to talk specifics beyond what fits in a chat window.",
+    detail: null,
+    isContact: true
+  }
+];
+
+const fallbacks = [
+  "That one's outside the file. Try one of the questions below — I'm better rehearsed on those.",
+  "I don't have a good answer for that on hand. Ask me about a project or what I'm looking for next instead?",
+  "That's a bit beyond what's in this profile. Pick a question below and I'll actually be useful.",
+  "Can't help with that one honestly. The chips below are safer ground."
+];
+
+const suggestedQuestions = [
+  "What are you looking for next?",
+  "What's a project you're proud of?",
+  "What are your strengths?",
+  "What makes you different?"
+];
+
+/* ============================================================
+   STATE + DOM
+   ============================================================ */
+const chatWindow = document.getElementById('chatWindow');
+const chipsRow = document.getElementById('chipsRow');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+
+let exchangeCount = 0;
+let nudgeShown = false;
+let lastTopicId = null;
+
+function renderChips(){
+  chipsRow.innerHTML = '';
+  suggestedQuestions.forEach(q => {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.type = 'button';
+    chip.textContent = q;
+    chip.addEventListener('click', () => handleUserMessage(q));
+    chipsRow.appendChild(chip);
+  });
+}
+
+function scrollToBottom(){
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function addMessage(text, sender, opts = {}){
+  const div = document.createElement('div');
+  div.className = 'msg ' + sender;
+
+  if(sender === 'assistant' && opts.eyebrow){
+    const eyebrow = document.createElement('span');
+    eyebrow.className = 'eyebrow';
+    eyebrow.textContent = opts.eyebrow;
+    div.appendChild(eyebrow);
+  }
+
+  const body = document.createElement('span');
+  body.innerHTML = text;
+  div.appendChild(body);
+
+  if(opts.detailTopicId){
+    const btn = document.createElement('button');
+    btn.className = 'msg-detail-btn';
+    btn.type = 'button';
+    btn.textContent = 'Tell me more →';
+    btn.addEventListener('click', () => {
+      btn.remove();
+      const topic = knowledgeBase.find(t => t.id === opts.detailTopicId);
+      if(topic) showTyping(() => addMessage(topic.detail, 'assistant', { eyebrow: 'More detail' }));
+    });
+    div.appendChild(document.createElement('br'));
+    div.appendChild(btn);
+  }
+
+  chatWindow.appendChild(div);
+  scrollToBottom();
+}
+
+function showTyping(callback){
+  const typing = document.createElement('div');
+  typing.className = 'typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  chatWindow.appendChild(typing);
+  scrollToBottom();
+  const delay = 550 + Math.random() * 500;
+  setTimeout(() => {
+    typing.remove();
+    callback();
+  }, delay);
+}
+
+function findTopic(input){
+  const lower = input.toLowerCase();
+  let best = null;
+  let bestScore = 0;
+  knowledgeBase.forEach(topic => {
+    let score = 0;
+    topic.keywords.forEach(kw => {
+      if(lower.includes(kw)) score += kw.split(' ').length; // longer phrase matches score higher
+    });
+    if(score > bestScore){
+      bestScore = score;
+      best = topic;
+    }
+  });
+  return bestScore > 0 ? best : null;
+}
+
+function renderContactCard(){
+  const div = document.createElement('div');
+  div.className = 'nudge';
+  div.innerHTML = `<strong>Resume &amp; contact</strong><br>Everything above in document form, or just email me directly.
+    <div class="nudge-links">
+      <a href="${RESUME_URL}" target="_blank" rel="noopener">Download resume</a>
+      <a href="mailto:${EMAIL}" class="secondary">Email me</a>
+      <a href="${LINKEDIN_URL}" target="_blank" rel="noopener" class="secondary">LinkedIn</a>
+    </div>`;
+  chatWindow.appendChild(div);
+  scrollToBottom();
+}
+
+function maybeShowNudge(){
+  if(nudgeShown) return;
+  if(exchangeCount === 2){
+    nudgeShown = true;
+    showTyping(() => {
+      addMessage("If any of this is landing — I'd rather you had the paper trail than take my word for it.", 'assistant', { eyebrow: 'By the way' });
+      setTimeout(renderContactCard, 250);
+    });
+  }
+}
+
+function handleUserMessage(text){
+  const trimmed = text.trim();
+  if(!trimmed) return;
+
+  addMessage(trimmed, 'user');
+  userInput.value = '';
+  exchangeCount++;
+
+  const topic = findTopic(trimmed);
+
+  showTyping(() => {
+    if(topic){
+      lastTopicId = topic.id;
+      if(topic.isContact){
+        addMessage(topic.short, 'assistant', { eyebrow: topic.eyebrow });
+        setTimeout(renderContactCard, 250);
+      } else {
+        addMessage(topic.short, 'assistant', {
+          eyebrow: topic.eyebrow,
+          detailTopicId: topic.detail ? topic.id : null
+        });
+      }
+    } else {
+      const fb = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+      addMessage(fb, 'assistant', { eyebrow: 'Hm' });
+    }
+    maybeShowNudge();
+  });
+}
+
+sendBtn.addEventListener('click', () => handleUserMessage(userInput.value));
+userInput.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') handleUserMessage(userInput.value);
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init(){
+  renderChips();
+  showTyping(() => {
+    addMessage("Hi — I'm set up to answer questions about my background, my work, and what I'm looking for next, the way I'd answer them in person. Ask away, or tap a question below.", 'assistant', { eyebrow: 'Welcome' });
+  });
+}
+init();
+</script>
+
+</body>
+</html>
